@@ -29,7 +29,6 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
-# TODO refactoring!!!!!!!! URG
 def score(dice)
   # You need to write this method
    return 0 if (dice.empty?)
@@ -38,25 +37,30 @@ def score(dice)
    repeated_dice = dice.group_by {|i| i}
 
    repeated_dice.each { |key, value|
-      if (key == 5)
-        result += (key * 100) if(value.length == 3)
-        result += (50 * value.length) if(value.length < 3) 
-        result += ((key * 100) + 50) if(value.length == 4) 
-      end 
+      times_repeated = value.length
 
-      if (key == 1)
-        result += (100 * value.length) if(value.length < 3)
-        result += 1000 if(value.length == 3)
-        result += 1100 if(value.length == 4)
-        result += 1200 if(value.length == 5)
-      end
-
-      if( key !=1 && key !=5 && value.length == 3) 
-        result += (key * 100) 
+      while times_repeated > 0
+        if(times_repeated >= 3) then
+          aaa = 0
+          aaa = key == 1 ? 1000 : key * 100
+          result += aaa
+          times_repeated -= 3
+        else
+          bbb = 0
+          bbb = value_to_add(key)
+          result += bbb
+          times_repeated -= 1
+        end                 
       end
   }
 
   return result
+end
+
+def value_to_add (key)
+  return value = 100 if key == 1
+  return value = 50 if key == 5
+  return 0
 end
 
 class AboutScoringProject < Neo::Koan
